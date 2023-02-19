@@ -18,8 +18,8 @@ def main():
         num = int.from_bytes(fd.read(2), 'little')                  # Determines the number of images contained
         print(f"This file contains {num} image(s)")
         for i in range(num):
-            width = int.from_bytes(fd.read(1), 'little')
-            height = int.from_bytes(fd.read(1), 'little')
+            width = (int.from_bytes(fd.read(1), 'little') - 1) % 256 + 1   # Gets the dimensions
+            height = (int.from_bytes(fd.read(1), 'little') - 1) % 256 + 1  # The math changes it from [0-255] to [1-256]
             print(f"Image #{i+1} is {width}x{height} pixels")       # Prints the pixel size field
             fd.read(6)  # Contains color metadata and, in cursors only, an offset from the focus to the top left
             print(f"Image #{i+1} is {int.from_bytes(fd.read(4), 'little')} bytes")  # Prints the byte size field
